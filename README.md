@@ -164,6 +164,62 @@ for k, v in chord_progressions.items():
     print(k)
     print(chord_repr_list_to_chords(v))
 
+from musiclang_predict import MusicLangPredictor, corpus
+from tqdm import tqdm
+import os
+
+# 定义和弦进行字典
+chord_progressions = {
+    "流行经典": ["CM", "GM", "Am", "FM"],
+    "爵士风情": ["Dm7", "G7", "CM7", "FM7"],
+    "阳光旋律": ["EM", "GM", "AM", "CM"],
+    "布鲁斯律动": ["A7", "D7", "A7", "E7", "D7", "A7", "E7"],
+    "温暖叙事": ["GM", "DM", "Em", "CM"],
+    "忧郁温暖": ["Am", "GM", "FM", "EM"],
+    "灵魂深处": ["Fm", "AbM", "EbM", "DbM"],
+    "乡村风情": ["GM", "CM", "DM", "GM"],
+    "爵士夜晚": ["Am7", "D7", "GM7", "CM7"],
+    "情感流淌": ["BbM7", "Gm7", "Cm7", "F7"]
+}
+
+# 初始化 MusicLangPredictor
+ml = MusicLangPredictor('musiclang/musiclang-v2')
+
+# 设置参数
+song_name = 'bach_847'  # 从 corpus.list_corpus() 获取可用歌曲列表
+nb_tokens = 1024
+temperature = 0.8
+top_p = 1.0
+seed = 3666
+output_dir = 'output_midi_files'  # 指定保存 MIDI 文件的路径
+
+# 创建输出目录
+os.makedirs(output_dir, exist_ok=True)
+
+# 使用 tqdm 迭代和弦进行字典
+for name, progression in tqdm(chord_progressions.items(), desc="生成 MIDI 文件"):
+    # 将和弦列表转换为字符串
+    chord_progression_str = " ".join(progression)
+    
+    # 生成音乐
+    score = ml.predict_chords(
+        chord_progression_str,
+        score=corpus.get_midi_path_from_corpus(song_name),
+        time_signature=(4, 4),
+        nb_tokens=nb_tokens,
+        prompt_chord_range=(0, 4),
+        temperature=temperature,
+        topp=top_p,
+        rng_seed=seed  # 设置为 0 以取消种子
+    )
+    
+    # 保存 MIDI 文件
+    output_path = os.path.join(output_dir, f"{name}.mid")
+    score.to_midi(output_path, tempo=110, time_signature=(4, 4))
+
+print(f"所有 MIDI 文件已保存到目录: {output_dir}")
+
+!zip -r output_midi_files.zip output_midi_files
 ```
 
 <h2 id="next">What's coming next at MusicLang? 👀</h2>
