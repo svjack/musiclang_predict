@@ -246,6 +246,30 @@ find "提瓦特音乐（人物）（新）" -type f -name "*.mp3" -exec basic-pi
 git clone https://huggingface.co/spaces/svjack/Advanced-MIDI-Renderer && cd Advanced-MIDI-Renderer && pip install -r requirements.txt
 python demo_app.py
 ```
+```python
+from gradio_client import Client, handle_file
+
+client = Client("http://127.0.0.1:7860")
+mid_file_name = "output_midi/卡维_basic_pitch.mid"
+result = client.predict(
+		input_midi=handle_file(mid_file_name),
+		render_type="Render as-is",
+		soundfont_bank="Super GM",
+		render_sample_rate="16000",
+		custom_render_patch=-1,
+		render_align="Do not align",
+		render_transpose_value=0,
+		render_transpose_to_C4=False,
+		render_output_as_solo_piano=False,
+		render_remove_drums=False,
+		api_name="/Render_MIDI"
+)
+#print(result)
+from shutil import copy2
+copy2(result[4], "render.wav")
+from IPython import display
+display.Audio("render.wav")
+```
 
 <h2 id="next">What's coming next at MusicLang? 👀</h2>
 <br/>
