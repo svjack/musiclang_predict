@@ -53,6 +53,11 @@ Install the `musiclang-predict` package :
 pip install musiclang_predict
 pip install scipy==1.12.0
 ```
+
+
+- Render In:     
+- https://huggingface.co/spaces/asigalov61/Advanced-MIDI-Renderer
+
 <h2 id="examples">Examples 🎹</h2>
 
 <h3 id="example_1">1. Generate your first music 🕺</h3> 
