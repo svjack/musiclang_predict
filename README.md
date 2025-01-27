@@ -51,6 +51,7 @@ Install the `musiclang-predict` package :
 
 ```bash
 pip install musiclang_predict
+pip install scipy==1.12.0
 ```
 <h2 id="examples">Examples 🎹</h2>
 
@@ -139,7 +140,7 @@ score = ml.predict_chords(
     rng_seed=seed # set to 0 to unset seed
 )
 
-score.to_midi('test.mid', tempo=110, time_signature=(4, 4))
+score.to_midi('test_bash.mid', tempo=110, time_signature=(4, 4))
 ```
 
 <h2 id="next">What's coming next at MusicLang? 👀</h2>
