@@ -243,7 +243,7 @@ find "提瓦特音乐（人物）（新）" -type f -name "*.mp3" -exec basic-pi
 
 - MIDI Render APP
 ```bash
-https://huggingface.co/spaces/svjack/Advanced-MIDI-Renderer && cd Advanced-MIDI-Renderer && pip install -r requirements.txt
+git clone https://huggingface.co/spaces/svjack/Advanced-MIDI-Renderer && cd Advanced-MIDI-Renderer && pip install -r requirements.txt
 python demo_app.py
 ```
 
