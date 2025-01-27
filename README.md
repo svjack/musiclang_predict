@@ -227,7 +227,7 @@ print(f"所有 MIDI 文件已保存到目录: {output_dir}")
 !zip -r output_midi_files.zip output_midi_files
 ```
 
-- Genshin Impact Venti Music demo
+- Genshin Impact （Venti） Music demo
 ```
 git clone https://huggingface.co/datasets/svjack/dialogue_feat_merge_save_unique
 cp dialogue_feat_merge_save_unique/提瓦特音乐（人物）（新）.zip .
@@ -237,6 +237,8 @@ cp 提瓦特音乐（人物）（新）/温迪.mp3 .
 pip install basic-pitch
 mkdir output_midi
 basic-pitch output_midi 温迪.mp3
+
+find "提瓦特音乐（人物）（新）" -type f -name "*.mp3" -exec basic-pitch output_midi {} \;
 ```
 
 <h2 id="next">What's coming next at MusicLang? 👀</h2>
