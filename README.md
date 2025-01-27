@@ -282,7 +282,7 @@ https://github.com/user-attachments/assets/608bdea1-98f6-47b1-a82c-9413545ce826
 
 https://github.com/user-attachments/assets/6892f1fb-f2f5-41bc-b9fe-cb3b91e1f489
 
-
+- Kaveh Transform
 ```python
 from musiclang_predict import MusicLangPredictor, corpus
 from tqdm import tqdm
@@ -340,6 +340,63 @@ for name, progression in tqdm(chord_progressions.items(), desc="生成 MIDI 文�
 print(f"所有 MIDI 文件已保存到目录: {output_dir}")
 
 !zip -r kaveh_midi_files.zip kaveh_midi_files
+```
+
+- Kaveh Transform MP4
+```python
+import os
+from gradio_client import Client, handle_file
+from shutil import copy2
+from tqdm import tqdm  # 导入 tqdm
+
+# 初始化 Gradio 客户端
+client = Client("http://127.0.0.1:7860")
+
+# 定义输入和输出路径
+midi_dir = "kaveh_midi_files"  # MIDI 文件所在的目录
+output_dir = "kaveh_output_mp4"  # 输出 MP4 文件的目录
+
+# 确保输出目录存在
+os.makedirs(output_dir, exist_ok=True)
+
+# 获取所有 MIDI 文件
+midi_files = [f for f in os.listdir(midi_dir) if f.endswith(".mid")]
+
+# 使用 tqdm 显示进度条
+for midi_file in tqdm(midi_files, desc="Processing MIDI files"):
+    mid_file_path = os.path.join(midi_dir, midi_file)
+    
+    # 使用 Gradio 客户端渲染 MIDI 文件
+    result = client.predict(
+        input_midi=handle_file(mid_file_path),
+        render_type="Render as-is",
+        soundfont_bank="Super GM",
+        render_sample_rate="16000",
+        custom_render_patch=-1,
+        render_align="Do not align",
+        render_transpose_value=0,
+        render_transpose_to_C4=False,
+        render_output_as_solo_piano=False,
+        render_remove_drums=False,
+        api_name="/Render_MIDI"
+    )
+    
+    # 将渲染后的 WAV 文件复制到当前目录
+    wav_output_path = "render.wav"
+    copy2(result[4], wav_output_path)
+    
+    # 定义输出 MP4 文件的路径
+    output_mp4_path = os.path.join(output_dir, f"卡维_{midi_file.replace('.mid', '.mp4')}")
+    
+    # 使用 ffmpeg 将 WAV 文件转换为 MP4 文件
+    os.system(f'ffmpeg -i {wav_output_path} -codec:a libmp3lame -qscale:a 2 {output_mp4_path} -y')
+    
+    # 清理临时文件（可选）
+    os.remove(wav_output_path)
+
+print("All files processed! Check the output_mp4 directory.")
+
+!zip -r kaveh_output_mp4.zip kaveh_output_mp4
 ```
 
 
