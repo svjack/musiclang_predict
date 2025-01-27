@@ -269,7 +269,21 @@ from shutil import copy2
 copy2(result[4], "render.wav")
 from IPython import display
 display.Audio("render.wav")
+
+!ffmpeg -i render.wav -codec:a libmp3lame -qscale:a 2 卡维_midi_render.mp4 -y
+!ffmpeg -i "提瓦特音乐（人物）（新）/卡维.mp3" -codec:a libmp3lame -qscale:a 2 卡维.mp4 -y
 ```
+
+
+
+https://github.com/user-attachments/assets/608bdea1-98f6-47b1-a82c-9413545ce826
+
+
+
+https://github.com/user-attachments/assets/6892f1fb-f2f5-41bc-b9fe-cb3b91e1f489
+
+
+
 
 <h2 id="next">What's coming next at MusicLang? 👀</h2>
 <br/>
