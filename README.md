@@ -143,6 +143,29 @@ score = ml.predict_chords(
 score.to_midi('test_bash.mid', tempo=110, time_signature=(4, 4))
 ```
 
+- 可用的不同音乐风格
+```python
+from musiclang.analyze.chord_repr_to_chord import chord_repr_list_to_chords
+
+chord_progressions = {
+    "流行经典": ["CM", "GM", "Am", "FM"],
+    "爵士风情": ["Dm7", "G7", "CM7", "FM7"],
+    "阳光旋律": ["EM", "GM", "AM", "CM"],
+    "布鲁斯律动": ["A7", "D7", "A7", "E7", "D7", "A7", "E7"],
+    "温暖叙事": ["GM", "DM", "Em", "CM"],
+    "忧郁温暖": ["Am", "GM", "FM", "EM"],
+    "灵魂深处": ["Fm", "AbM", "EbM", "DbM"],
+    "乡村风情": ["GM", "CM", "DM", "GM"],
+    "爵士夜晚": ["Am7", "D7", "GM7", "CM7"],
+    "情感流淌": ["BbM7", "Gm7", "Cm7", "F7"]
+}
+
+for k, v in chord_progressions.items():
+    print(k)
+    print(chord_repr_list_to_chords(v))
+
+```
+
 <h2 id="next">What's coming next at MusicLang? 👀</h2>
 <br/>
 
