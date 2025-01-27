@@ -227,7 +227,7 @@ print(f"所有 MIDI 文件已保存到目录: {output_dir}")
 !zip -r output_midi_files.zip output_midi_files
 ```
 
-- Genshin Impact （Venti） Music demo
+- Genshin Impact （Venti/Kaveh） Music demo
 ```
 git clone https://huggingface.co/datasets/svjack/dialogue_feat_merge_save_unique
 cp dialogue_feat_merge_save_unique/提瓦特音乐（人物）（新）.zip .
@@ -283,6 +283,64 @@ https://github.com/user-attachments/assets/608bdea1-98f6-47b1-a82c-9413545ce826
 https://github.com/user-attachments/assets/6892f1fb-f2f5-41bc-b9fe-cb3b91e1f489
 
 
+```python
+from musiclang_predict import MusicLangPredictor, corpus
+from tqdm import tqdm
+import os
+
+# 定义和弦进行字典
+chord_progressions = {
+    "流行经典": ["CM", "GM", "Am", "FM"],
+    "爵士风情": ["Dm7", "G7", "CM7", "FM7"],
+    "阳光旋律": ["EM", "GM", "AM", "CM"],
+    "布鲁斯律动": ["A7", "D7", "A7", "E7", "D7", "A7", "E7"],
+    "温暖叙事": ["GM", "DM", "Em", "CM"],
+    "忧郁温暖": ["Am", "GM", "FM", "EM"],
+    "灵魂深处": ["Fm", "AbM", "EbM", "DbM"],
+    "乡村风情": ["GM", "CM", "DM", "GM"],
+    "爵士夜晚": ["Am7", "D7", "GM7", "CM7"],
+    "情感流淌": ["BbM7", "Gm7", "Cm7", "F7"]
+}
+
+# 初始化 MusicLangPredictor
+ml = MusicLangPredictor('musiclang/musiclang-v2')
+
+# 设置参数
+#song_name = 'bach_847'  # 从 corpus.list_corpus() 获取可用歌曲列表
+nb_tokens = 1024
+temperature = 0.8
+top_p = 1.0
+seed = 3666
+output_dir = 'kaveh_midi_files'  # 指定保存 MIDI 文件的路径
+
+# 创建输出目录
+os.makedirs(output_dir, exist_ok=True)
+
+# 使用 tqdm 迭代和弦进行字典
+for name, progression in tqdm(chord_progressions.items(), desc="生成 MIDI 文件"):
+    # 将和弦列表转换为字符串
+    chord_progression_str = " ".join(progression)
+    
+    # 生成音乐
+    score = ml.predict_chords(
+        chord_progression_str,
+        score="output_midi/卡维_basic_pitch.mid",
+        time_signature=(4, 4),
+        nb_tokens=nb_tokens,
+        prompt_chord_range=(0, 4),
+        temperature=temperature,
+        topp=top_p,
+        rng_seed=seed  # 设置为 0 以取消种子
+    )
+    
+    # 保存 MIDI 文件
+    output_path = os.path.join(output_dir, f"{name}.mid")
+    score.to_midi(output_path, tempo=110, time_signature=(4, 4))
+
+print(f"所有 MIDI 文件已保存到目录: {output_dir}")
+
+!zip -r kaveh_midi_files.zip kaveh_midi_files
+```
 
 
 <h2 id="next">What's coming next at MusicLang? 👀</h2>
